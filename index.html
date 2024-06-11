@@ -9,10 +9,35 @@
     <h1>Hello, JavaScript!</h1>
     <p>Here's some content.</p>
 
+    <form id="myForm">
+        <label for="inputContent">Enter content:</label><br>
+        <input type="text" id="inputContent" name="inputContent"><br><br>
+        <button type="submit">Send to scrape.py</button>
+    </form>
+
     <!-- JavaScript code will go here -->
     <script>
-        // JavaScript code goes here
-        console.log('Hello from JavaScript!');
+        document.getElementById('myForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting normally
+
+            // Get the input value
+            var inputContent = document.getElementById('inputContent').value;
+
+            // Send the input to scrape.py
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'scrape.py', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify({content: inputContent}));
+
+            // Optional: Handle response from scrape.py
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    console.log('Content sent successfully.');
+                } else {
+                    console.error('Error sending content.');
+                }
+            };
+        });
     </script>
 </body>
 </html>
